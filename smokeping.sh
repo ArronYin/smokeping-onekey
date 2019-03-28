@@ -134,7 +134,7 @@ Single_Run_SmokePing(){
 #启动Master服务
 Master_Run_SmokePing(){
 	cd /usr/loacl/smokeping/bin
-	./smokeping --config=/opt/smokeping/etc/config --logfile=smoke.log
+	./smokeping --config=/usr/local/smokeping/etc/config --logfile=smoke.log
 	spawn-fcgi -a 127.0.0.1 -p 9007 -P /var/run/smokeping-fastcgi.pid -u nginx -f /usr/loacl/smokeping/htdocs/smokeping.fcgi
 	Change_Access
 }
@@ -160,7 +160,7 @@ Single_Install(){
 	Change_Access
 	Disable_SELinux
 	Delete_Files
-	mkdir /opt/smokeping/onekeymanage
+	mkdir /usr/local/smokeping/onekeymanage
 	echo "Single" > ${smokeping_ver}
 	echo -e "${Info} 安装 SmokePing 单机版完成"
 }
@@ -180,7 +180,7 @@ Slaves_Install(){
 	Configure_SomkePing
 	Disable_SELinux
 	Delete_Files
-	mkdir /opt/smokeping/onekeymanage
+	mkdir /usr/local/smokeping/onekeymanage
 	echo "Slaves" > ${smokeping_ver}
 	echo -e "${slaves_secret}" > ${smokeping_key}
 	echo -e "${slaves_name}" > ${smokeping_name}
@@ -205,7 +205,7 @@ Master_Install(){
 	Change_Access
 	Disable_SELinux
 	Delete_Files
-	mkdir /opt/smokeping/onekeymanage
+	mkdir /usr/local/smokeping/onekeymanage
 	echo "Master" > ${smokeping_ver}
 	echo -e "${Info} 安装 SmokePing Master端完成"
 }
@@ -330,7 +330,7 @@ case "$num" in
 		done
 		if [[ $um == "y" ]]; then
 			kill -9 `ps -ef |grep "smokeping"|grep -v "grep"|grep -v "smokeping.sh"|awk '{print $2}'|xargs` 2>/dev/null
-			rm -rf /opt/smokeping
+			rm -rf /usr/local/smokeping
 			echo
 			echo -e "${Info} Smokeping ${mode2} 卸载完成! 开始安装 Master端!"
 			echo
@@ -356,7 +356,7 @@ case "$num" in
 		done
 		if [[ $um == "y" ]]; then
 			kill -9 `ps -ef |grep "smokeping"|grep -v "grep"|grep -v "smokeping.sh"|awk '{print $2}'|xargs` 2>/dev/null
-			rm -rf /opt/smokeping
+			rm -rf /usr/local/smokeping
 			echo
 			echo -e "${Info} Smokeping ${mode2} 卸载完成! 开始安装 Slaves端!"
 			echo
@@ -382,7 +382,7 @@ case "$num" in
 		done
 		if [[ $um == "y" ]]; then
 			kill -9 `ps -ef |grep "smokeping"|grep -v "grep"|grep -v "smokeping.sh"|awk '{print $2}'|xargs` 2>/dev/null
-			rm -rf /opt/smokeping
+			rm -rf /usr/local/smokeping
 			echo
 			echo -e "${Info} Smokeping ${mode2} 卸载完成! 开始安装 单机版!"
 			echo
