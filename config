@@ -7,13 +7,13 @@ sendmail = /usr/sbin/sendmail
 # NOTE: do not put the Image Cache below cgi-bin
 # since all files under cgi-bin will be executed ... this is not
 # good for images.
-imgcache = /opt/smokeping/htdocs/cache
+imgcache = /usr/local/smokeping/htdocs/cache
 imgurl = cache
-datadir = /opt/smokeping/htdocs/data
-piddir = /opt/smokeping/htdocs/var
+datadir = /usr/local/smokeping/htdocs/data
+piddir = /usr/local/smokeping/htdocs/var
 cgiurl = http://some.url/smokeping.cgi
-smokemail = /opt/smokeping/etc/smokemail.dist
-tmail = /opt/smokeping/etc/tmail.dist
+smokemail = /usr/local/smokeping/etc/smokemail.dist
+tmail = /usr/local/smokeping/etc/tmail.dist
 # specify this to get syslog logging
 syslogfacility = local0
 # each probe is now run in its own process
@@ -49,7 +49,7 @@ AVERAGE  0.5 144   720
 
 charset = utf-8
 
-template = /opt/smokeping/etc/basepage.html.dist
+template = /usr/local/smokeping/etc/basepage.html.dist
 
 + charts
 
@@ -110,7 +110,7 @@ unison_tolerance = 2
 binary = /usr/sbin/fping
 
 *** Slaves ***
-secrets=/opt/smokeping/etc/smokeping_secrets.dist
+secrets=/usr/local/smokeping/etc/smokeping_secrets.dist
 +boomer
 display_name=boomer
 color=0000ff
