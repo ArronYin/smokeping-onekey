@@ -9,10 +9,10 @@ Error="${Red_font_prefix}[错误]${Font_color_suffix}"
 Tip="${Green_font_prefix}[注意]${Font_color_suffix}"
 
 #定义文件路径
-smokeping_ver="/opt/smokeping/onekeymanage/ver"
-smokeping_key="/opt/smokeping/onekeymanage/key"
-smokeping_name="/opt/smokeping/onekeymanage/name"
-smokeping_host="/opt/smokeping/onekeymanage/host"
+smokeping_ver="/usr/loacl/smokeping/onekeymanage/ver"
+smokeping_key="/usr/loacl/smokeping/onekeymanage/key"
+smokeping_name="/usr/loacl/smokeping/onekeymanage/name"
+smokeping_host="/usr/loacl/smokeping/onekeymanage/host"
 tcpping="/usr/bin/tcpping"
 
 #Check Root
@@ -62,19 +62,19 @@ Delete_Files(){
 
 #配置smokeping
 Configure_SomkePing(){
-	cd /opt/smokeping/htdocs
+	cd /usr/loacl/smokeping/htdocs
 	mkdir var cache data
 	mv smokeping.fcgi.dist smokeping.fcgi
-	cd /opt/smokeping/etc
+	cd /usr/loacl/smokeping/etc
 	rm -rf config*
 	wget -O config https://raw.githubusercontent.com/ILLKX/smokeping-onekey/master/config
 	wget -O /opt/smokeping/lib/Smokeping/Graphs.pm https://raw.githubusercontent.com/ILLKX/smokeping-onekey/master/Graphs.pm
-	chmod 600 /opt/smokeping/etc/smokeping_secrets.dist
+	chmod 600 /usr/loacl/smokeping/etc/smokeping_secrets.dist
 }
 
 #配置config Master
 Master_Configure_SomkePing(){
-	cd /opt/smokeping/etc
+	cd /usr/loacl/smokeping/etc
 	sed -i "s/some.url/$server_name/g" config
 }
 
@@ -113,42 +113,42 @@ Disable_SELinux(){
 
 #修改smokeping权限
 Change_Access(){
-	chown -R nginx:nginx /opt/smokeping/htdocs
-	chown -R nginx:nginx /opt/smokeping/etc/smokeping_secrets.dist
+	chown -R nginx:nginx /usr/loacl/smokeping/htdocs
+	chown -R nginx:nginx /usr/loacl/smokeping/etc/smokeping_secrets.dist
 }
 
 #设置Slaves密钥
 Slaves_Set_Secret(){
-	rm -rf /opt/smokeping/etc/smokeping_secrets.dist
-	echo -e "${slaves_secret}" > /opt/smokeping/etc/smokeping_secrets.dist
+	rm -rf /usr/loacl/smokeping/etc/smokeping_secrets.dist
+	echo -e "${slaves_secret}" > /usr/loacl/smokeping/etc/smokeping_secrets.dist
 }
 
 #启动Single服务
 Single_Run_SmokePing(){
-	cd /opt/smokeping/bin
-	./smokeping --config=/opt/smokeping/etc/config --logfile=smoke.log
-	spawn-fcgi -a 127.0.0.1 -p 9007 -P /var/run/smokeping-fastcgi.pid -u nginx -f /opt/smokeping/htdocs/smokeping.fcgi
+	cd /usr/loacl/smokeping/bin
+	./smokeping --config=/usr/loacl/smokeping/etc/config --logfile=smoke.log
+	spawn-fcgi -a 127.0.0.1 -p 9007 -P /var/run/smokeping-fastcgi.pid -u nginx -f /usr/loacl/smokeping/htdocs/smokeping.fcgi
 	Change_Access
 }
 
 #启动Master服务
 Master_Run_SmokePing(){
-	cd /opt/smokeping/bin
+	cd /usr/loacl/smokeping/bin
 	./smokeping --config=/opt/smokeping/etc/config --logfile=smoke.log
-	spawn-fcgi -a 127.0.0.1 -p 9007 -P /var/run/smokeping-fastcgi.pid -u nginx -f /opt/smokeping/htdocs/smokeping.fcgi
+	spawn-fcgi -a 127.0.0.1 -p 9007 -P /var/run/smokeping-fastcgi.pid -u nginx -f /usr/loacl/smokeping/htdocs/smokeping.fcgi
 	Change_Access
 }
 
 #启动Slaves服务
 Slaves_Run_SmokePing(){
-	cd /opt/smokeping/bin
-	./smokeping --master-url=http://$server_name/smokeping.fcgi --cache-dir=/opt/smokeping/htdocs/cache --shared-secret=/opt/smokeping/etc/smokeping_secrets.dist --slave-name=$slaves_name --logfile=/opt/smokeping/slave.log
+	cd /usr/loacl/smokeping/bin
+	./smokeping --master-url=http://$server_name/smokeping.fcgi --cache-dir=/usr/loacl/smokeping/htdocs/cache --shared-secret=/opt/smokeping/etc/smokeping_secrets.dist --slave-name=$slaves_name --logfile=/opt/smokeping/slave.log
 }
 
 Single_Install(){
 	echo
 	kill -9 `ps -ef |grep "smokeping"|grep -v "grep"|grep -v "smokeping.sh"|awk '{print $2}'|xargs` 2>/dev/null
-	rm -rf /opt/smokeping
+	rm -rf /usr/loacl/smokeping
 	Ask_Change_Source
 	Install_Dependency
 	Download_Source
@@ -171,7 +171,7 @@ Slaves_Install(){
 	read -p "请输入Slaves名称 : " slaves_name
 	read -p "请输入Slaves密钥 : " slaves_secret
 	kill -9 `ps -ef |grep "smokeping"|grep -v "grep"|grep -v "smokeping.sh"|awk '{print $2}'|xargs` 2>/dev/null
-	rm -rf /opt/smokeping
+	rm -rf /usr/loacl/smokeping
 	Ask_Change_Source
 	Install_Dependency
 	Download_Source
@@ -192,7 +192,7 @@ Master_Install(){
 	echo
 	read -p "请输入Master地址 : " server_name
 	kill -9 `ps -ef |grep "smokeping"|grep -v "grep"|grep -v "smokeping.sh"|awk '{print $2}'|xargs` 2>/dev/null
-	rm -rf /opt/smokeping
+	rm -rf /usr/loacl/smokeping
 	Ask_Change_Source
 	Install_Dependency
 	Download_Source
