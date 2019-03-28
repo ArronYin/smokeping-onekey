@@ -43,7 +43,7 @@ Install_Dependency(){
 #下载smokeping
 Download_Source(){
 	cd
-	wget https://github.com/ILLKX/smokeping-onekey/raw/master/smokeping-2.6.11.tar.gz
+	wget https://github.com/ArronYin/smokeping-onekey/raw/master/smokeping-2.6.11.tar.gz
 	tar -xzvf smokeping-2.6.11.tar.gz
 	cd smokeping-2.6.11
 }
@@ -67,8 +67,8 @@ Configure_SomkePing(){
 	mv smokeping.fcgi.dist smokeping.fcgi
 	cd /usr/loacl/smokeping/etc
 	rm -rf config*
-	wget -O config https://raw.githubusercontent.com/ILLKX/smokeping-onekey/master/config
-	wget -O /opt/smokeping/lib/Smokeping/Graphs.pm https://raw.githubusercontent.com/ILLKX/smokeping-onekey/master/Graphs.pm
+	wget -O config https://raw.githubusercontent.com/ArronYin/smokeping-onekey/master/config
+	wget -O /opt/smokeping/lib/Smokeping/Graphs.pm https://raw.githubusercontent.com/ArronYin/smokeping-onekey/master/Graphs.pm
 	chmod 600 /usr/loacl/smokeping/etc/smokeping_secrets.dist
 }
 
@@ -85,16 +85,16 @@ Install_Nginx(){
 
 #修改Nginx配置文件
 Configure_Nginx(){
-	wget -O /etc/nginx/conf.d/smokeping.conf https://raw.githubusercontent.com/ILLKX/smokeping-onekey/master/smokeping.conf
+	wget -O /etc/nginx/conf.d/smokeping.conf https://raw.githubusercontent.com/ArronYin/smokeping-onekey/master/smokeping.conf
 	rm -rf /etc/nginx/nginx.conf
-	wget -O /etc/nginx/nginx.conf https://raw.githubusercontent.com/ILLKX/smokeping-onekey/master/nginx.conf
+	wget -O /etc/nginx/nginx.conf https://raw.githubusercontent.com/ArronYin/smokeping-onekey/master/nginx.conf
 }
 
 #修改Nginx配置文件 Master
 Master_Configure_Nginx(){
-	wget -O /etc/nginx/conf.d/smokeping.conf https://raw.githubusercontent.com/ILLKX/smokeping-onekey/master/smokeping-master.conf
+	wget -O /etc/nginx/conf.d/smokeping.conf https://raw.githubusercontent.com/ArronYin/smokeping-onekey/master/smokeping-master.conf
 	rm -rf /etc/nginx/nginx.conf
-	wget -O /etc/nginx/nginx.conf https://raw.githubusercontent.com/ILLKX/smokeping-onekey/master/nginx.conf
+	wget -O /etc/nginx/nginx.conf https://raw.githubusercontent.com/ArronYin/smokeping-onekey/master/nginx.conf
 }
 
 #启动Nginx并禁用防火墙
@@ -233,7 +233,7 @@ Install_Tcpping(){
 	cd
 	yum install tcptraceroute -y
 	rm -rf /usr/bin/tcpping
-	wget https://raw.githubusercontent.com/ILLKX/smokeping-onekey/master/tcpping
+	wget https://raw.githubusercontent.com/ArronYin/smokeping-onekey/master/tcpping
 	chmod 777 tcpping
 	mv tcpping /usr/bin/
 	echo -e "${Info} 安装 tcpping 完成"
