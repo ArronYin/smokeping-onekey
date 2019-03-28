@@ -142,7 +142,7 @@ Master_Run_SmokePing(){
 #启动Slaves服务
 Slaves_Run_SmokePing(){
 	cd /usr/loacl/smokeping/bin
-	./smokeping --master-url=http://$server_name/smokeping.fcgi --cache-dir=/usr/loacl/smokeping/htdocs/cache --shared-secret=/opt/smokeping/etc/smokeping_secrets.dist --slave-name=$slaves_name --logfile=/opt/smokeping/slave.log
+	./smokeping --master-url=http://$server_name/smokeping.fcgi --cache-dir=/usr/loacl/smokeping/htdocs/cache --shared-secret=/usr/loacl/smokeping/etc/smokeping_secrets.dist --slave-name=$slaves_name --logfile=/usr/loacl/smokeping/slave.log
 }
 
 Single_Install(){
