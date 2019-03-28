@@ -9,10 +9,10 @@ Error="${Red_font_prefix}[错误]${Font_color_suffix}"
 Tip="${Green_font_prefix}[注意]${Font_color_suffix}"
 
 #定义文件路径
-smokeping_ver="/usr/loaclsmokeping/onekeymanage/ver"
-smokeping_key="/usr/loaclsmokeping/onekeymanage/key"
-smokeping_name="/usr/loaclsmokeping/onekeymanage/name"
-smokeping_host="/usr/loaclsmokeping/onekeymanage/host"
+smokeping_ver="/usr/loacl/smokeping/onekeymanage/ver"
+smokeping_key="/usr/loacl/smokeping/onekeymanage/key"
+smokeping_name="/usr/loacl/smokeping/onekeymanage/name"
+smokeping_host="/usr/loacl/smokeping/onekeymanage/host"
 tcpping="/usr/bin/tcpping"
 
 #Check Root
@@ -50,8 +50,8 @@ Download_Source(){
 
 #安装smokeping
 Install_SomkePing(){
-	./setup/build-perl-modules.sh /usr/loaclsmokeping/thirdparty
-	./configure --prefix=/usr/loaclsmokeping
+	./setup/build-perl-modules.sh /usr/loacl/smokeping/thirdparty
+	./configure --prefix=/usr/loacl/smokeping
 	make install
 }
 
@@ -62,19 +62,19 @@ Delete_Files(){
 
 #配置smokeping
 Configure_SomkePing(){
-	cd /usr/loaclsmokeping/htdocs
+	cd /usr/loacl/smokeping/htdocs
 	mkdir var cache data
 	mv smokeping.fcgi.dist smokeping.fcgi
-	cd /usr/loaclsmokeping/etc
+	cd /usr/loacl/smokeping/etc
 	rm -rf config*
 	wget -O config https://raw.githubusercontent.com/ArronYin/smokeping-onekey/master/config
-	wget -O /usr/loaclsmokeping/lib/Smokeping/Graphs.pm https://raw.githubusercontent.com/ArronYin/smokeping-onekey/master/Graphs.pm
-	chmod 600 /usr/loaclsmokeping/etc/smokeping_secrets.dist
+	wget -O /usr/loacl/smokeping/lib/Smokeping/Graphs.pm https://raw.githubusercontent.com/ArronYin/smokeping-onekey/master/Graphs.pm
+	chmod 600 /usr/loacl/smokeping/etc/smokeping_secrets.dist
 }
 
 #配置config Master
 Master_Configure_SomkePing(){
-	cd /usr/loaclsmokeping/etc
+	cd /usr/loacl/smokeping/etc
 	sed -i "s/some.url/$server_name/g" config
 }
 
@@ -113,42 +113,42 @@ Disable_SELinux(){
 
 #修改smokeping权限
 Change_Access(){
-	chown -R nginx:nginx /usr/loaclsmokeping/htdocs
-	chown -R nginx:nginx /usr/loaclsmokeping/etc/smokeping_secrets.dist
+	chown -R nginx:nginx /usr/loacl/smokeping/htdocs
+	chown -R nginx:nginx /usr/loacl/smokeping/etc/smokeping_secrets.dist
 }
 
 #设置Slaves密钥
 Slaves_Set_Secret(){
-	rm -rf /usr/loaclsmokeping/etc/smokeping_secrets.dist
-	echo -e "${slaves_secret}" > /usr/loaclsmokeping/etc/smokeping_secrets.dist
+	rm -rf /usr/loacl/smokeping/etc/smokeping_secrets.dist
+	echo -e "${slaves_secret}" > /usr/loacl/smokeping/etc/smokeping_secrets.dist
 }
 
 #启动Single服务
 Single_Run_SmokePing(){
-	cd /usr/loaclsmokeping/bin
-	./smokeping --config=/usr/loaclsmokeping/etc/config --logfile=smoke.log
-	spawn-fcgi -a 127.0.0.1 -p 9007 -P /var/run/smokeping-fastcgi.pid -u nginx -f /usr/loaclsmokeping/htdocs/smokeping.fcgi
+	cd /usr/loacl/smokeping/bin
+	./smokeping --config=/usr/loacl/smokeping/etc/config --logfile=smoke.log
+	spawn-fcgi -a 127.0.0.1 -p 9007 -P /var/run/smokeping-fastcgi.pid -u nginx -f /usr/loacl/smokeping/htdocs/smokeping.fcgi
 	Change_Access
 }
 
 #启动Master服务
 Master_Run_SmokePing(){
-	cd /usr/loaclsmokeping/bin
-	./smokeping --config=/usr/loaclsmokeping/etc/config --logfile=smoke.log
-	spawn-fcgi -a 127.0.0.1 -p 9007 -P /var/run/smokeping-fastcgi.pid -u nginx -f /usr/loaclsmokeping/htdocs/smokeping.fcgi
+	cd /usr/loacl/smokeping/bin
+	./smokeping --config=/usr/loacl/smokeping/etc/config --logfile=smoke.log
+	spawn-fcgi -a 127.0.0.1 -p 9007 -P /var/run/smokeping-fastcgi.pid -u nginx -f /usr/loacl/smokeping/htdocs/smokeping.fcgi
 	Change_Access
 }
 
 #启动Slaves服务
 Slaves_Run_SmokePing(){
-	cd /usr/loaclsmokeping/bin
-	./smokeping --master-url=http://$server_name/smokeping.fcgi --cache-dir=/usr/loaclsmokeping/htdocs/cache --shared-secret=/usr/loaclsmokeping/etc/smokeping_secrets.dist --slave-name=$slaves_name --logfile=/usr/loaclsmokeping/slave.log
+	cd /usr/loacl/smokeping/bin
+	./smokeping --master-url=http://$server_name/smokeping.fcgi --cache-dir=/usr/loacl/smokeping/htdocs/cache --shared-secret=/usr/loacl/smokeping/etc/smokeping_secrets.dist --slave-name=$slaves_name --logfile=/usr/loacl/smokeping/slave.log
 }
 
 Single_Install(){
 	echo
 	kill -9 `ps -ef |grep "smokeping"|grep -v "grep"|grep -v "smokeping.sh"|awk '{print $2}'|xargs` 2>/dev/null
-	rm -rf /usr/loaclsmokeping
+	rm -rf /usr/loacl/smokeping
 	Ask_Change_Source
 	Install_Dependency
 	Download_Source
@@ -160,7 +160,7 @@ Single_Install(){
 	Change_Access
 	Disable_SELinux
 	Delete_Files
-	mkdir /usr/loaclsmokeping/onekeymanage
+	mkdir /usr/loacl/smokeping/onekeymanage
 	echo "Single" > ${smokeping_ver}
 	echo -e "${Info} 安装 SmokePing 单机版完成"
 }
@@ -171,7 +171,7 @@ Slaves_Install(){
 	read -p "请输入Slaves名称 : " slaves_name
 	read -p "请输入Slaves密钥 : " slaves_secret
 	kill -9 `ps -ef |grep "smokeping"|grep -v "grep"|grep -v "smokeping.sh"|awk '{print $2}'|xargs` 2>/dev/null
-	rm -rf /usr/loaclsmokeping
+	rm -rf /usr/loacl/smokeping
 	Ask_Change_Source
 	Install_Dependency
 	Download_Source
@@ -180,7 +180,7 @@ Slaves_Install(){
 	Configure_SomkePing
 	Disable_SELinux
 	Delete_Files
-	mkdir /usr/loaclsmokeping/onekeymanage
+	mkdir /usr/loacl/smokeping/onekeymanage
 	echo "Slaves" > ${smokeping_ver}
 	echo -e "${slaves_secret}" > ${smokeping_key}
 	echo -e "${slaves_name}" > ${smokeping_name}
@@ -192,7 +192,7 @@ Master_Install(){
 	echo
 	read -p "请输入Master地址 : " server_name
 	kill -9 `ps -ef |grep "smokeping"|grep -v "grep"|grep -v "smokeping.sh"|awk '{print $2}'|xargs` 2>/dev/null
-	rm -rf /usr/loaclsmokeping
+	rm -rf /usr/loacl/smokeping
 	Ask_Change_Source
 	Install_Dependency
 	Download_Source
@@ -205,7 +205,7 @@ Master_Install(){
 	Change_Access
 	Disable_SELinux
 	Delete_Files
-	mkdir /usr/loaclsmokeping/onekeymanage
+	mkdir /usr/loacl/smokeping/onekeymanage
 	echo "Master" > ${smokeping_ver}
 	echo -e "${Info} 安装 SmokePing Master端完成"
 }
@@ -252,7 +252,7 @@ Uninstall(){
 	done
 	if [[ $um == "y" ]]; then
 		kill -9 `ps -ef |grep "smokeping"|grep -v "grep"|grep -v "smokeping.sh"|awk '{print $2}'|xargs` 2>/dev/null
-		rm -rf /usr/loaclsmokeping
+		rm -rf /usr/loacl/smokeping
 		echo
 		echo -e "${Info} SmokePing 卸载完成!"
 		echo
@@ -330,7 +330,7 @@ case "$num" in
 		done
 		if [[ $um == "y" ]]; then
 			kill -9 `ps -ef |grep "smokeping"|grep -v "grep"|grep -v "smokeping.sh"|awk '{print $2}'|xargs` 2>/dev/null
-			rm -rf /usr/loaclsmokeping
+			rm -rf /usr/loacl/smokeping
 			echo
 			echo -e "${Info} Smokeping ${mode2} 卸载完成! 开始安装 Master端!"
 			echo
@@ -356,7 +356,7 @@ case "$num" in
 		done
 		if [[ $um == "y" ]]; then
 			kill -9 `ps -ef |grep "smokeping"|grep -v "grep"|grep -v "smokeping.sh"|awk '{print $2}'|xargs` 2>/dev/null
-			rm -rf /usr/loaclsmokeping
+			rm -rf /usr/loacl/smokeping
 			echo
 			echo -e "${Info} Smokeping ${mode2} 卸载完成! 开始安装 Slaves端!"
 			echo
@@ -382,7 +382,7 @@ case "$num" in
 		done
 		if [[ $um == "y" ]]; then
 			kill -9 `ps -ef |grep "smokeping"|grep -v "grep"|grep -v "smokeping.sh"|awk '{print $2}'|xargs` 2>/dev/null
-			rm -rf /usr/loaclsmokeping
+			rm -rf /usr/loacl/smokeping
 			echo
 			echo -e "${Info} Smokeping ${mode2} 卸载完成! 开始安装 单机版!"
 			echo
