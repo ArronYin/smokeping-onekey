@@ -50,8 +50,8 @@ Download_Source(){
 
 #安装smokeping
 Install_SomkePing(){
-	./setup/build-perl-modules.sh /opt/smokeping/thirdparty
-	./configure --prefix=/opt/smokeping
+	./setup/build-perl-modules.sh /usr/loacl/smokeping/thirdparty
+	./configure --prefix=/usr/loacl/smokeping
 	make install
 }
 
