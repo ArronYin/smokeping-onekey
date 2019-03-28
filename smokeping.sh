@@ -68,7 +68,7 @@ Configure_SomkePing(){
 	cd /usr/loacl/smokeping/etc
 	rm -rf config*
 	wget -O config https://raw.githubusercontent.com/ArronYin/smokeping-onekey/master/config
-	wget -O /opt/smokeping/lib/Smokeping/Graphs.pm https://raw.githubusercontent.com/ArronYin/smokeping-onekey/master/Graphs.pm
+	wget -O /usr/loacl/smokeping/lib/Smokeping/Graphs.pm https://raw.githubusercontent.com/ArronYin/smokeping-onekey/master/Graphs.pm
 	chmod 600 /usr/loacl/smokeping/etc/smokeping_secrets.dist
 }
 
